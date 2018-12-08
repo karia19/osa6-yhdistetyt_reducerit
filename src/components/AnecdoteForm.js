@@ -6,14 +6,20 @@ import addAnecdotes  from '../services/anecdotes'
 
 
 class AnecdoteForm extends React.Component {
+
+
   handleSubmit = (e) => {
     e.preventDefault()
     const content = e.target.anecdote.value
-    this.context.store.dispatch(newAnecdotes(content)) &&
+    this.context.store.dispatch(newAnecdotes(`You add ${content}`)) &&
     this.context.store.dispatch(
        addCreate(content) 
     )
     addAnecdotes.createNewAnecdotes(content)
+
+    setTimeout(() => {
+      this.context.store.dispatch(newAnecdotes(''))
+    }, 3000)
     
   
     e.target.anecdote.value = ''
