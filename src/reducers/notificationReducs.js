@@ -1,17 +1,14 @@
 
-
-const notificationReducer = (state = 'NEW', action) => {
-    console.log('Tulekoo', action)
+const notificationReducer = (state = {}, action) => {
     switch (action.type) {
         case 'MAKE_NEW':
-        return action.data
+        return state = { message: action.data}
 
         default: 
         return state
     }
 }
 export const newAnecdotes = (data) => {
-    console.log('miki',data)
     return {
         type: 'MAKE_NEW',
         data
