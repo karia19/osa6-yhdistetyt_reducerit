@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { newAnecdotes } from '../reducers/notificationReducs'
 import Filter from '../components/Filter'
 import  serverVote from '../services/anecdotes'
+import Message from '../components/Notification'
 
 
 
@@ -13,13 +14,23 @@ class AnecdoteList extends React.Component {
     this.unsubscribe = store.subscribe(() =>
       this.forceUpdate()
     )
+    
   }
   render() {
+    const update = () => {
+      setTimeout(() => {
+        this.context.store.dispatch(newAnecdotes(''))
+      },3000)
+    }
+   
+
     console.log('Kirjaimet',this.context.store.getState().Letters)
 
     const show = () => {
       console.log("Masa",this.context.store.getState())
+
       const { Letters, anecdotesKaksi} = this.context.store.getState()
+      
 
       if(Letters === ''){
         return anecdotesKaksi
@@ -31,6 +42,7 @@ class AnecdoteList extends React.Component {
     //const anecdotes = this.context.store.getState().anecdotesKaksi
     return (
       <div>
+        <Message message={this.context.store.getState().notificationsKaksi.message} />
         <h2>Anecdotes</h2>
         <Filter />
         {show().sort((a, b) => b.votes - a.votes).map(anecdote =>
@@ -43,7 +55,9 @@ class AnecdoteList extends React.Component {
               <button onClick={() => 
                 this.context.store.dispatch(makeVote(anecdote.id)) &&
                   this.context.store.dispatch(newAnecdotes(anecdote.content)) &&
-                  serverVote.addVote(anecdote.id, anecdote.content, anecdote.votes)
+                  serverVote.addVote(anecdote.id, anecdote.content, anecdote.votes) 
+                  && update()
+                 
                 
                 //this.context.store.dispatch(newAnecdotes(anecdote.id))
               }>
